@@ -1,14 +1,11 @@
-#!usr/bin/python
 from socket import *
 
 host = 'localhost' # '127.0.0.1' can also be used
-port = 52002
+port = 52004
 
 sock = socket()
-#Connecting to socket
-sock.connect((host, port)) #Connect takes tuple of host and port
+sock.connect((host, port))
 
-#Infinite loop to keep client running.
 while True:
     data = sock.recv(1024)
     print data
