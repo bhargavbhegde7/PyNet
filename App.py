@@ -7,10 +7,11 @@ def getAllIPs():
     return resultList
 
 def sendMsg(msg):
-    
+
 
 def isIPAddrUp():
 
 
 def getPotentialIPs(allIPs):
     for ipAddr in allIPs:
+        
