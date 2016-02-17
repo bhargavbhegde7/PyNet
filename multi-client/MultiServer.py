@@ -18,7 +18,6 @@ def clientthread(conn,addr):
         else :
             conn.send('command not found')
 
-
 while True:
     conn, addr = sock.accept()
     start_new_thread(clientthread,(conn,addr))
