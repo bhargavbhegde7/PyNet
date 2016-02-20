@@ -1,7 +1,7 @@
 from socket import *
 
 host = 'localhost' # '127.0.0.1' can also be used
-port = 52004
+port = 52000
 
 sock = socket()
 sock.connect((host, port))

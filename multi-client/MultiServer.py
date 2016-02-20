@@ -1,26 +1,53 @@
 from socket import *
 from thread import *
+import os
 
-host = ''  #'localhost' or '127.0.0.1' or '' are all same
-port = 52004
+#returns json string with files and directories
+# {
+#     files : ['a.txt','b.java','c.m','d.mp4'],
+#     directories : ['abc','fds','ttrr']
+# }
 
-sock = socket()
-sock.bind((host, port))
-sock.listen(5) #5 number of clients can queue
+def getFiles(path):
+    jsonList = {}
+    files=[]
+    directories=[]
+    allItems = os.listdir(path)
+    for item in allItems:
+        if os.path.isdir(item):
+            directories.append(item)
+        else :
+            files.append(item)
+    jsonList['files'] = files
+    jsonList['directories'] = directories
+    return jsonList
 
-def clientthread(conn,addr):
+
+
+
+def clientThread(conn,addr):
     conn.send('Hi '+addr[0]+'! I am server '+host+'\n') #only string
     while True:
         data = conn.recv(1024) #bytes
         print data," by ",addr
         if data=='list':
             conn.send('list of files')
+        elif 'cd' in data:
+            conn.send('change directory to'+data.replace("cd","",1))
         else :
             conn.send('command not found')
 
+#main program :
+host = ''  #'localhost' or '127.0.0.1' or '' are all same
+port = 52000
+
+sock = socket()
+sock.bind((host, port))
+sock.listen(5) #5 number of clients can queue
+
 while True:
     conn, addr = sock.accept()
-    start_new_thread(clientthread,(conn,addr))
+    start_new_thread(clientThread,(conn,addr))
 
 conn.close()
 sock.close()
