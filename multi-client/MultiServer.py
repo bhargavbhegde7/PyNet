@@ -5,7 +5,7 @@ import json
 
 host = ''  #'localhost' or '127.0.0.1' or '' are all same
 port = 52000
-pwd = '/home/bhargav/'
+pwd = '.'
 
 sock = socket()
 sock.bind((host, port))
