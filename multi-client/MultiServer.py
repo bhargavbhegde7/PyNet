@@ -1,13 +1,21 @@
 from socket import *
 from thread import *
 import os
+import json
+
+host = ''  #'localhost' or '127.0.0.1' or '' are all same
+port = 52000
+pwd = '/home/bhargav/'
+
+sock = socket()
+sock.bind((host, port))
+sock.listen(5) #5 number of clients can queue
 
 #returns json string with files and directories
 # {
 #     files : ['a.txt','b.java','c.m','d.mp4'],
 #     directories : ['abc','fds','ttrr']
 # }
-
 def getFiles(path):
     jsonList = {}
     files=[]
@@ -20,10 +28,7 @@ def getFiles(path):
             files.append(item)
     jsonList['files'] = files
     jsonList['directories'] = directories
-    return jsonList
-
-
-
+    return json.dumps(jsonList)
 
 def clientThread(conn,addr):
     conn.send('Hi '+addr[0]+'! I am server '+host+'\n') #only string
@@ -31,20 +36,13 @@ def clientThread(conn,addr):
         data = conn.recv(1024) #bytes
         print data," by ",addr
         if data=='list':
-            conn.send('list of files')
+            conn.send(getFiles(pwd))
         elif 'cd' in data:
             conn.send('change directory to'+data.replace("cd","",1))
         else :
             conn.send('command not found')
 
 #main program :
-host = ''  #'localhost' or '127.0.0.1' or '' are all same
-port = 52000
-
-sock = socket()
-sock.bind((host, port))
-sock.listen(5) #5 number of clients can queue
-
 while True:
     conn, addr = sock.accept()
     start_new_thread(clientThread,(conn,addr))
